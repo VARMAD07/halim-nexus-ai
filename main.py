@@ -10,7 +10,6 @@ if str(project_root) not in sys.path:
 
 # ✅ STEP 2 — Now safe to import custom modules
 from database.storage.db_manager import DatabaseManager
-from config.settings import Settings
 
 # ✅ STEP 3 — Auto-initialize database on every cold start
 _db = DatabaseManager()
