@@ -2,19 +2,19 @@ import streamlit as st
 import sys
 import importlib
 from pathlib import Path
-from database.storage.db_manager import DatabaseManager
 
-# ✅ Auto-initialize database on every cold start (critical for cloud deployment)
-_db = DatabaseManager()
-_db.create_tables()
-
-# Enforce absolute path anchors for deep nested imports
-# ✅ FIXED: insert(0) ensures YOUR app package loads before any pip-installed 'app' conflict
+# ✅ STEP 1 — ALWAYS FIRST: set up sys.path before ANY custom imports
 project_root = Path(__file__).resolve().parent
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
+# ✅ STEP 2 — Now safe to import custom modules
+from database.storage.db_manager import DatabaseManager
 from config.settings import Settings
+
+# ✅ STEP 3 — Auto-initialize database on every cold start
+_db = DatabaseManager()
+_db.create_tables()
 
 st.set_page_config(
     page_title="HALIM NEXUS AI",
@@ -31,7 +31,6 @@ workspace = st.sidebar.radio(
 
 st.sidebar.write("---")
 
-# Route code threads seamlessly without breaking the system runtime state
 if workspace == "Student Workspace":
     import app.dashboards.student_dashboard as sd
     sd.show_student_dashboard()
