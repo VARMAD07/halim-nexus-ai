@@ -1,0 +1,11 @@
+# Local Environment Secrets
+.env
+
+# Database Binaries
+*.db
+database/data/
+
+# Python Cache Elements
+__pycache__/
+*.pyc
+.streamlit/
