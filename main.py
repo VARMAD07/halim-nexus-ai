@@ -2,6 +2,11 @@ import streamlit as st
 import sys
 import importlib
 from pathlib import Path
+from database.storage.db_manager import DatabaseManager
+
+# ✅ Auto-initialize database on every cold start (critical for cloud deployment)
+_db = DatabaseManager()
+_db.create_tables()
 
 # Enforce absolute path anchors for deep nested imports
 # ✅ FIXED: insert(0) ensures YOUR app package loads before any pip-installed 'app' conflict
