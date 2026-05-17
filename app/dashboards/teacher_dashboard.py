@@ -11,11 +11,11 @@ if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
 from database.storage.db_manager import DatabaseManager
-from .notifier import NotifieryEngine
+from .notifier import NotifierEngine
 
 # Initialize backend engines
 db = DatabaseManager()
-notifier = NotifieryEngine()
+notifier = NotifierEngine()
 
 def show_teacher_dashboard():
     # =====================================
