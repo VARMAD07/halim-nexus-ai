@@ -1,26 +1,35 @@
 ﻿import os
 from pathlib import Path
-from dotenv import load_dotenv
 
-# ✅ FIXED: Dynamic path anchored to this file's location — works on any machine
-env_path = Path(__file__).resolve().parent.parent / ".env"
-if env_path.exists():
-    load_dotenv(dotenv_path=str(env_path))
-else:
-    load_dotenv()
+# Load .env for local development
+try:
+    from dotenv import load_dotenv
+    env_path = Path(__file__).resolve().parent.parent / ".env"
+    if env_path.exists():
+        load_dotenv(dotenv_path=str(env_path))
+    else:
+        load_dotenv()
+except Exception:
+    pass
+
+# ✅ Read from Streamlit secrets on cloud, fall back to .env locally
+def _get(key, default=""):
+    try:
+        import streamlit as st
+        return st.secrets.get(key, os.getenv(key, default))
+    except Exception:
+        return os.getenv(key, default)
 
 class Settings:
-    """
-    Central operational credentials mapper for HALIM NEXUS AI.
-    Hard-anchored file system pathing to guarantee live environment loading.
-    """
-    GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "").strip().strip('"').strip("'")
+    GEMINI_API_KEY      = _get("GEMINI_API_KEY")
+    TWILIO_ACCOUNT_SID  = _get("TWILIO_ACCOUNT_SID")
+    TWILIO_AUTH_TOKEN   = _get("TWILIO_AUTH_TOKEN")
+    TWILIO_FROM_NUMBER  = _get("TWILIO_FROM_NUMBER")
+    SYSTEM_EMAIL_PASSWORD = _get("SYSTEM_EMAIL_PASSWORD")
 
     @classmethod
     def validate(cls):
-        """Validates that critical credentials are loaded correctly at boot."""
-        if not cls.GEMINI_API_KEY or cls.GEMINI_API_KEY in ("", "YOUR_API_KEY"):
-            print("⚠️ WARNING: GEMINI_API_KEY is unconfigured. Engine will run using local mock fallbacks.")
+        if not cls.GEMINI_API_KEY:
+            print("⚠️ WARNING: GEMINI_API_KEY is unconfigured.")
         else:
-            print(f"✅ GEMINI engine authenticated successfully.")
-            Settings.validate()
+            print("✅ GEMINI engine authenticated.")
