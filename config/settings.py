@@ -12,7 +12,7 @@ except Exception:
 # Streamlit Cloud automatically injects secrets as environment variables
 # so os.getenv works on both local (.env) and cloud (Streamlit secrets)
 class Settings:
-    GEMINI_API_KEY        = os.getenv("GEMINI_API_KEY", "")
+    GEMINI_API_KEY        = os.getenv("AIzaSyBnFQ4DijqgmQ1IehAf0k_CDVSjOqdE1WY", "")
     TWILIO_ACCOUNT_SID    = os.getenv("TWILIO_ACCOUNT_SID", "")
     TWILIO_AUTH_TOKEN     = os.getenv("TWILIO_AUTH_TOKEN", "")
     TWILIO_FROM_NUMBER    = os.getenv("TWILIO_FROM_NUMBER", "")
